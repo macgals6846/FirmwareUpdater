@@ -19,6 +19,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- This is necessary for file browser -->
+        <activity
+            android:name=".FileBrowserActivity"
+            android:label="File browser"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.example.firmwareupdater.firmwareupdaterv1.SELECT_DIRECTORY_ACTION"></action>
+            </intent-filter>
+        </activity>
+        <!-- End of file browser necessity -->
     </application>
 
 </manifest>

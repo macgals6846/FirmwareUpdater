@@ -46,14 +46,14 @@ import java.util.List;
 
 public class FileBrowserActivity extends Activity {
 	// Intent Action Constants
-	public static final String INTENT_ACTION_SELECT_DIR = "com.example.firmwareupdater.firmwareupdaterv1.SELECT_DIRECTORY_ACTION";
-	public static final String INTENT_ACTION_SELECT_FILE = "com.example.firmwareupdater.firmwareupdaterv1.SELECT_FILE_ACTION";
+	public static final String INTENT_ACTION_SELECT_DIR = "com.example.firmwareupdater.firmwareupdaterv11.SELECT_DIRECTORY_ACTION";
+	public static final String INTENT_ACTION_SELECT_FILE = "com.example.firmwareupdater.firmwareupdaterv11.SELECT_FILE_ACTION";
 
 	// Intent parameters names constants
 	public static final String startDirectoryParameter = "/storage/extSdCard";
-	public static final String returnDirectoryParameter = "com.example.firmwareupdater.firmwareupdaterv1.directoryPathRet";
-	public static final String returnFileParameter = "com.example.firmwareupdater.firmwareupdaterv1.filePathRet";
-	public static final String showCannotReadParameter = "com.example.firmwareupdater.firmwareupdaterv1.showCannotRead";
+	public static final String returnDirectoryParameter = "com.example.firmwareupdater.firmwareupdaterv11.directoryPathRet";
+	public static final String returnFileParameter = "com.example.firmwareupdater.firmwareupdaterv11.filePathRet";
+	public static final String showCannotReadParameter = "com.example.firmwareupdater.firmwareupdaterv11.showCannotRead";
 	public static final String filterExtension = ".hex";
 
 	// Stores names of traversed directories
@@ -94,7 +94,7 @@ public class FileBrowserActivity extends Activity {
 
 		// Set action for this activity
 		Intent thisInt = this.getIntent();
-		currentAction = SELECT_DIRECTORY;// This would be a default action in
+		currentAction = SELECT_FILE;// This would be a default action in
 											// case not set by intent
 		if (thisInt.getAction().equalsIgnoreCase(INTENT_ACTION_SELECT_FILE)) {
 			Log.d(LOGTAG, "SELECT ACTION - SELECT FILE");
