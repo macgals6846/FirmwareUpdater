@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
@@ -153,25 +154,26 @@ public class MainActivity extends AppCompatActivity {
 
         private Socket clientThreadSocket;
         private BufferedReader client_input;
+        private PrintWriter server_output;
 
         SocketServerReplyThread(Socket socket) {
             this.clientThreadSocket = socket;
-            try{
+            /*try{
                 this.client_input = new BufferedReader(new InputStreamReader(this.clientThreadSocket.getInputStream()));
             }catch(IOException e){
                 e.printStackTrace();
-            }
+            }*/
         }
 
         @Override
         public void run() {
-            //OutputStream outputStream;
-            //String msgReply = "Hello from Android";
+
             while(!Thread.currentThread().isInterrupted()){
                 try {
+                    this.client_input = new BufferedReader(new InputStreamReader(this.clientThreadSocket.getInputStream()));
                     String read = client_input.readLine();
                     message_from_client = "Client Message:" + read + "\n";
-                    if(read != null){
+                    //if(read != null){
                         MainActivity.this.runOnUiThread(new Runnable() {
 
                             @Override
@@ -179,22 +181,15 @@ public class MainActivity extends AppCompatActivity {
                                 displaytext.append(message_from_client);
                             }
                         });
-                    }
+                    //}
 
-                    //outputStream = clientThreadSocket.getOutputStream();
-                    //PrintStream printStream = new PrintStream(outputStream);
-                    //printStream.print(msgReply);
-                    //printStream.close();
+                    server_output = new PrintWriter(clientThreadSocket.getOutputStream(), true);
+                    String server_msgReply = "Hello from Server\n";
+                    server_output.print("Server message" + server_msgReply);
+                    server_output.flush();
+                    clientThreadSocket.close();
 
-                    //message += "Server Replayed: " + msgReply + "\n";
-                    /*
-                    MainActivity.this.runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            textView_server.setText(message);
-                        }
-                    });*/
+                    message = "Server message replayed:" + server_msgReply;
 
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
