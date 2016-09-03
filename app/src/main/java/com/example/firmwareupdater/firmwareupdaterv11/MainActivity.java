@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private String mPath = "adventur.txt";
     private List<String> mLines;
     ServerSocket serverSocket;
-    String message = "";
+    String message, message_from_client = "";
 
 
     @Override
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                     });
 
                     SocketServerReplyThread socketServerReplyThread = new SocketServerReplyThread(socket);
-                    socketServerReplyThread.run();
+                    socketServerReplyThread.start();
 
                 }
             } catch (IOException e) {
@@ -165,27 +165,28 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void run() {
-            OutputStream outputStream;
-            String msgReply = "Hello from Android";
+            //OutputStream outputStream;
+            //String msgReply = "Hello from Android";
             while(!Thread.currentThread().isInterrupted()){
                 try {
-                    final String read = client_input.readLine();
+                    String read = client_input.readLine();
+                    message_from_client = "Client Message:" + read + "\n";
                     if(read != null){
                         MainActivity.this.runOnUiThread(new Runnable() {
 
                             @Override
                             public void run() {
-                                displaytext.append("Client Message:" + read + "\n");
+                                displaytext.append(message_from_client);
                             }
                         });
                     }
 
-                    outputStream = clientThreadSocket.getOutputStream();
-                    PrintStream printStream = new PrintStream(outputStream);
-                    printStream.print(msgReply);
-                    printStream.close();
+                    //outputStream = clientThreadSocket.getOutputStream();
+                    //PrintStream printStream = new PrintStream(outputStream);
+                    //printStream.print(msgReply);
+                    //printStream.close();
 
-                    message += "Server Replayed: " + msgReply + "\n";
+                    //message += "Server Replayed: " + msgReply + "\n";
                     /*
                     MainActivity.this.runOnUiThread(new Runnable() {
 
