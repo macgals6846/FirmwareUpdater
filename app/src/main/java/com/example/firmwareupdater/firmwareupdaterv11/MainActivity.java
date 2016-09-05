@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private String mPath = "adventur.txt";
     private List<String> mLines;
     ServerSocket serverSocket;
-    String message, message_from_client = null,serverWrite = null ;
+    String message, message_from_client = "";
 
 
     @Override
@@ -78,10 +78,6 @@ public class MainActivity extends AppCompatActivity {
             String finalString = "";
             for (int i = 0; i < loadText.length; i++) {
                 finalString += loadText[i] + System.getProperty("line.separator");
-                Integer.parseInt(loadText[i].substring(1,3), 16);
-                Integer.parseInt(loadText[i].substring(3,7), 16);
-                Integer.parseInt(loadText[i].substring(7,9), 16);
-
             }
             displaytext.setText("Directory:\n"+mPath+"\n"+"File:\n"+finalString);
         }
@@ -100,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void StartServer(View view) {
         textView_server.setText(getIpAddress());
+        textView_client.setText("IP Address: Port Number\nNot connected");
 
         Thread socketServerThread = new Thread(new SocketServerThread());
         socketServerThread.start();
@@ -134,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
                     message = socket.getInetAddress()+":"+socket.getPort()+"\n";
 
                     MainActivity.this.runOnUiThread(new Runnable() {
+
                         @Override
                         public void run() {
                             textView_client.setText(message);
@@ -160,6 +158,11 @@ public class MainActivity extends AppCompatActivity {
 
         SocketServerReplyThread(Socket socket) {
             this.clientThreadSocket = socket;
+            /*try{
+                this.client_input = new BufferedReader(new InputStreamReader(this.clientThreadSocket.getInputStream()));
+            }catch(IOException e){
+                e.printStackTrace();
+            }*/
         }
 
         @Override
@@ -169,41 +172,22 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     this.client_input = new BufferedReader(new InputStreamReader(this.clientThreadSocket.getInputStream()));
                     String read = client_input.readLine();
-                    message_from_client = "Arduino Wifi:" + read + "\n";
+                    message_from_client = "Client Message:" + read + "\n";
+                    //if(read != null){
+                    MainActivity.this.runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            displaytext.append(message_from_client);
+                        }
+                    });
+                    //}
 
                     server_output = new PrintWriter(clientThreadSocket.getOutputStream(), true);
-                    String server_msgReply = null;
-                    switch(read){
-                        case "Hello":
-                            server_msgReply = "Welcome";
-                            break;
-                        case "Hex":
-                            //TODO Read hex file from specified path and filename
-                            server_msgReply = "Ok";
-                            break;
-                        case "x00":
-                            //TODO Programming using STK500 Protocol
-                            //server_msgReply = "Welcome";
-                            break;
-                        default:
-                            break;
-
-                    }
-                    serverWrite = "Android Phone:" + server_msgReply + "\n";
-                    server_output.print(server_msgReply);
+                    String server_msgReply = "Hello from Server\n";
+                    server_output.print("Server message" + server_msgReply);
                     server_output.flush();
-
-                    if(read != null){
-                        MainActivity.this.runOnUiThread(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                displaytext.append(message_from_client);
-                                displaytext.append(serverWrite);
-                            }
-                        });
-                    }
-                    //clientThreadSocket.close();
+                    clientThreadSocket.close();
 
                     message = "Server message replayed:" + server_msgReply;
 
