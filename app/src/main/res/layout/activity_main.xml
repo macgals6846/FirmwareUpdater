@@ -92,7 +92,7 @@
                 android:layout_alignParentRight="true"
                 >
                 <TextView
-                    android:text="IP Address: Port Number"
+                    android:text="IP Address: Port Number\nNot connected"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/textView_client"
